@@ -17,8 +17,13 @@ git push -u origin main
 **Before pushing, confirm no key is going up.** This should print nothing:
 
 ```bash
-git ls-files -z | xargs -0 grep -l 'AIzaSy'
+git log --all -S'AIzaSy' --oneline -- . ':!DEPLOY.md'
 ```
+
+Searching the **history** rather than the working tree is the point: a key that
+was committed once and removed later is still in the repo and still leaked.
+`DEPLOY.md` is excluded because this very command contains the string, and a
+check that matches itself is a check nobody trusts.
 
 `.env.local` holds the Places key and is gitignored. So are `dist`,
 `node_modules` and `public/dev`.
@@ -49,14 +54,58 @@ source on every deploy. They can never be stale in production.
 
 ## 3. Environment variables
 
-Settings → Environment variables → Production.
+Cloudflare moved this. The old **Settings → Environment variables → Production**
+path is gone, and their own docs are inconsistent about the replacement: the
+bindings page says **Settings → Variables and Secrets → Add**, while the build
+configuration page still says the old path. Variables and Secrets is the one
+that exists.
 
-| Variable | Side | Notes |
-|---|---|---|
-| `GOOGLE_PLACES_API_KEY` | server | The Places key. Must **not** be referrer restricted |
-| `GOOGLE_PLACE_ID` | server | `ChIJOTWxup1pekgRAdYPFtb0Aes` |
-| `VITE_GOOGLE_MAPS_EMBED_KEY` | **public** | A **separate** key, see below |
-| `VITE_GA4_ID` | public | Optional. Setting it switches the consent banner on |
+Because that path has now moved twice, **two of the seven variables have been
+taken out of the dashboard entirely.**
+
+### Committed, not configured
+
+`.env.production` is committed and holds the two build-time values:
+
+| Variable | Why it can be committed |
+|---|---|
+| `VITE_GOOGLE_MAPS_EMBED_KEY` | Sits in the map iframe URL, so it is public the moment the page is served. Protected by restricting it to the Maps Embed API and by HTTP referrer, not by secrecy |
+| `VITE_TURNSTILE_SITE_KEY` | Cloudflare publish this one deliberately. The secret half does the verifying |
+
+This is not laziness about secrets, it is about a real failure mode: **build
+variables and runtime bindings are configured in different places.** A `VITE_`
+variable set as a runtime binding is simply absent when Vite runs, the map
+falls back to a geocoded pin, and nothing errors. Committing them makes the
+build reproducible and removes the trap.
+
+**Never put a server-side key in `.env.production`.** The build refuses if the
+embed key matches the Places key, but it cannot catch every mistake.
+
+### Set in the dashboard
+
+Five, all server-side, under **Settings → Variables and Secrets**. Mark the
+three keys as secrets so they are encrypted and not readable back.
+
+| Variable | Value |
+|---|---|
+| `GOOGLE_PLACES_API_KEY` | The Places key. Must **not** be referrer restricted |
+| `GOOGLE_PLACE_ID` | `ChIJOTWxup1pekgRAdYPFtb0Aes` |
+| `BREVO_API_KEY` | From the studio Brevo account |
+| `ENQUIRY_TO_EMAIL` | `dubshackmotorsport@gmail.com` |
+| `ENQUIRY_FROM_EMAIL` | `emails@studioalex.co.uk` |
+| `TURNSTILE_SECRET_KEY` | The secret half of the Turnstile pair |
+
+`VITE_GA4_ID` is optional and would also go in `.env.production`. Setting it
+switches the consent banner on, so leave it out until analytics is wanted.
+
+### If the dashboard has moved again
+
+Wrangler does not rot the way a UI path does:
+
+```bash
+npx wrangler pages secret put BREVO_API_KEY --project-name=dubshack-motorsport
+npx wrangler pages secret list --project-name=dubshack-motorsport
+```
 
 ### The two Google keys can never be the same value
 
@@ -69,14 +118,12 @@ Create the second key: Google Cloud console → Credentials → Create credentia
 → API key. Then restrict it to **Maps Embed API** only, and by **HTTP referrer**
 to `dubshackmotorsport.co.uk/*`.
 
-**The build refuses if the two variables hold the same value.** That guard is
-deliberate and tested. Do not work around it.
+**The build refuses if the two hold the same value.** That guard is deliberate
+and tested. Do not work around it.
 
 Without the embed key the map falls back to a geocoded pin on Edensor Road with
 no business card, and in the UK it renders Google's own cookie interstitial
 inside the frame.
-
----
 
 ## 4. Deploy
 
