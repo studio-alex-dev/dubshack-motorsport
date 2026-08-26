@@ -25,6 +25,8 @@ const devFormStub = () => ({
       req.on('end', () => {
         console.log(`[dev stub] /api/enquiry received ${bytes} bytes, nothing sent`)
         res.setHeader('content-type', 'application/json')
+        // Same shape the real function returns. The client checks payload.ok,
+        // so a stub that only sets a 200 would pass here and fail in production.
         res.end(JSON.stringify({ ok: true, stub: true }))
       })
     })

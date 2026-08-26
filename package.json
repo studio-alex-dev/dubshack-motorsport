@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "postbuild": "rm -rf dist/dev",
     "images": "node scripts/build-images.mjs",
-    "sheet": "node scripts/build-sheet.mjs"
+    "sheet": "node scripts/build-sheet.mjs",
+    "test:form": "node scripts/test-enquiry-function.mjs",
+    "test": "npm run test:form"
   },
   "dependencies": {
     "react": "^18.3.1",

@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Eyebrow from './Eyebrow'
 import Reveal from './Reveal'
 import MStripe from './MStripe'
+import Turnstile from './Turnstile'
 import { SITE, telHref } from '../config'
 import { SERVICE_LIST } from '../services'
 
@@ -11,11 +12,12 @@ const POINTS = [
   'If it is urgent, ring rather than email. The phone gets answered.',
 ]
 
-// The form posts to /api/enquiry, a serverless function. It must never post to
-// an email API directly from the browser — the API key would be readable by
-// anyone viewing source. See CLAUDE.md; the function is not written yet.
+// The form posts to /api/enquiry, a Pages Function. It must never post to an
+// email API directly from the browser: the key would be readable by anyone
+// viewing source.
 export default function Enquiry() {
   const [state, setState] = useState({ status: 'idle', message: '' })
+  const captcha = useRef(null)
 
   async function onSubmit(e) {
     e.preventDefault()
@@ -31,15 +33,23 @@ export default function Enquiry() {
       const res = await fetch('/api/enquiry', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, turnstileToken: captcha.current?.token() || '' }),
       })
-      if (!res.ok) throw new Error('Bad response')
+      const payload = await res.json().catch(() => ({}))
+      if (!res.ok || !payload.ok) throw new Error(payload.error || 'Bad response')
+
       setState({ status: 'ok', message: 'Thanks, that has come through. We will come back to you shortly.' })
       form.reset()
-    } catch {
+      captcha.current?.reset()
+    } catch (err) {
+      // A used Turnstile token cannot be replayed, so the widget has to be
+      // cleared or the next attempt fails for a reason nobody can see.
+      captcha.current?.reset()
       setState({
         status: 'err',
-        message: `Something went wrong sending that. Please ring ${SITE.mobile} or email ${SITE.email}.`,
+        message: `${err.message && err.message !== 'Bad response'
+          ? err.message
+          : 'Something went wrong sending that.'} Please ring ${SITE.mobile} or email ${SITE.email}.`,
       })
     }
   }
@@ -116,6 +126,8 @@ export default function Enquiry() {
               <label htmlFor="website">Website</label>
               <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
             </div>
+
+            <Turnstile onReady={api => { captcha.current = api }} />
 
             <button className="btn btn--accent btn--lg btn--block" type="submit"
                     disabled={state.status === 'sending'}>
