@@ -149,6 +149,42 @@ const run = async (label, body, envOverride = env, opts = {}) => {
   ok('API key is NOT in the body', !brevo.opts.body.includes('test-key'))
 }
 
+// --- recipients: cc and bcc ----------------------------------------------
+// None of this was covered at first. CC and BCC were wired up and never
+// tested, and a silently dropped blind copy is exactly the sort of failure
+// nobody notices: the client still gets their enquiry, the studio just stops
+// hearing about them.
+{
+  const withCopies = {
+    ...env,
+    ENQUIRY_CC_EMAIL: 'workshop2@example.com',
+    ENQUIRY_BCC_EMAIL: 'seo@alex-stanley.co.uk',
+  }
+  await run('copies', VALID, withCopies)
+  const sent = JSON.parse(calls.find(c => c.url.includes('brevo')).opts.body)
+  ok('cc is applied',  sent.cc?.[0]?.email === 'workshop2@example.com')
+  ok('bcc is applied', sent.bcc?.[0]?.email === 'seo@alex-stanley.co.uk')
+  // "Blind" has to mean blind: the address must not leak into to or cc.
+  const visible = [...(sent.to || []), ...(sent.cc || [])].map(r => r.email)
+  ok('bcc is genuinely blind', !visible.includes('seo@alex-stanley.co.uk'))
+}
+{
+  // Unset must omit the key entirely rather than send an empty array, which
+  // some providers treat as a malformed recipient list.
+  await run('no copies', VALID, { ...env, ENQUIRY_CC_EMAIL: '', ENQUIRY_BCC_EMAIL: '' })
+  const sent = JSON.parse(calls.find(c => c.url.includes('brevo')).opts.body)
+  ok('cc omitted when unset',  !('cc' in sent))
+  ok('bcc omitted when unset', !('bcc' in sent))
+}
+{
+  // Comma separated, with the whitespace people actually type.
+  const many = { ...env, ENQUIRY_TO_EMAIL: 'a@example.com,  b@example.com ,c@example.com' }
+  await run('multiple recipients', VALID, many)
+  const sent = JSON.parse(calls.find(c => c.url.includes('brevo')).opts.body)
+  ok('comma separated list parses to three', sent.to.length === 3)
+  ok('whitespace is trimmed', sent.to[1].email === 'b@example.com')
+}
+
 // --- escaping -------------------------------------------------------------
 {
   await run('xss', { ...VALID, name: '<img src=x onerror=alert(1)>' })

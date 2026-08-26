@@ -97,7 +97,7 @@ export const EXTRA_PAGES = [
         items: [
           'Cloudflare, who host this site and pass the form on to us.',
           'Brevo, who deliver the enquiry to us as an email.',
-          'Studio Alex, who built and look after this site. The enquiry is sent through their Brevo account, so it passes through their system on the way to us.',
+          'Studio Alex, who built and look after this site. The enquiry goes out through their system, and they are sent a copy of it so they can tell when the form has stopped working. They use it for nothing else.',
           'Google, because our workshop email is a Gmail address, so your enquiry sits on Google\u2019s servers the same as any email you send us directly.',
         ],
         after: [

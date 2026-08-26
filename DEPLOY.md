@@ -83,7 +83,13 @@ embed key matches the Places key, but it cannot catch every mistake.
 
 ### Set in the dashboard
 
-Five, all server-side, under **Settings → Variables and Secrets**. Mark the
+The blind copy to `seo@alex-stanley.co.uk` is how you find out the form has
+broken before the client does, and how you spot a lead nobody has replied to.
+It is also **personal data landing in a studio inbox**, which is more than
+relaying it, so the privacy notice says so explicitly. Remove the variable and
+that sentence has to change with it.
+
+Six, all server-side, under **Settings → Variables and Secrets**. Mark the
 three keys as secrets so they are encrypted and not readable back.
 
 | Variable | Value |
@@ -91,7 +97,8 @@ three keys as secrets so they are encrypted and not readable back.
 | `GOOGLE_PLACES_API_KEY` | The Places key. Must **not** be referrer restricted |
 | `GOOGLE_PLACE_ID` | `ChIJOTWxup1pekgRAdYPFtb0Aes` |
 | `BREVO_API_KEY` | From the studio Brevo account |
-| `ENQUIRY_TO_EMAIL` | `dubshackmotorsport@gmail.com` |
+| `ENQUIRY_TO_EMAIL` | `dubshackmotorsport@gmail.com`. Comma separate for more |
+| `ENQUIRY_BCC_EMAIL` | `seo@alex-stanley.co.uk`, matching Exley and Bee Smart |
 | `ENQUIRY_FROM_EMAIL` | `emails@studioalex.co.uk` |
 | `TURNSTILE_SECRET_KEY` | The secret half of the Turnstile pair |
 
