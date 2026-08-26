@@ -498,6 +498,20 @@ nothing, and a later cleanup killed the widget from the second pass. No error
 anywhere, just an empty div. The fix is rendering only into an empty host, and
 not calling `remove()` in cleanup at all. Do not "tidy" that cleanup back in.
 
+**Turnstile falls open when unconfigured**, matching Classic to Current and
+Bee Smart: an unset `TURNSTILE_SECRET_KEY` drops back to the honeypot alone and
+warns in the logs. Exley fails closed and is the odd one out of the four.
+
+The trade is deliberate. Failing closed means a missing variable turns every
+genuine enquiry into "Security check failed" and nobody notices for weeks,
+because the form looks fine and simply refuses everyone. On a garage site a lost
+enquiry costs the client money; spam costs them a delete. **Do not quieten the
+warning** — it is the only signal that the form is running unprotected.
+
+One Turnstile keypair serves every Studio Alex site. A widget accepts a list of
+hostnames, so add this domain to the existing widget rather than making a new
+pair.
+
 **The sender is `emails@studioalex.co.uk`**, the studio's own authenticated
 domain, not the client's. It means no DNS work on `dubshackmotorsport.co.uk`
 before launch. `replyTo` is the customer, so replying still goes to them.

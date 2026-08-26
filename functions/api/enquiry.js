@@ -40,13 +40,11 @@ export async function onRequestPost({ request, env }) {
   const bad = validate(data, { required: REQUIRED, caps: { message: 2000, email: 120, vehicle: 80 } })
   if (bad) return json({ error: bad }, 400)
 
+  // Unconfigured returns ok:true and warns, so this only rejects a token that
+  // was actually present and actually failed. See shared/mail.js.
   const turnstile = await verifyTurnstile((body.turnstileToken ?? '').toString(), env, request)
   if (!turnstile.ok) {
-    const unconfigured = turnstile.reason === 'unconfigured'
-    return json(
-      { error: unconfigured ? 'Server not configured.' : 'Security check failed. Please try again.' },
-      unconfigured ? 500 : 400,
-    )
+    return json({ error: 'Security check failed. Please try again.' }, 400)
   }
 
   const rows = [

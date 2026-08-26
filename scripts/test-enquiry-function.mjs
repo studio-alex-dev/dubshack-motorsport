@@ -49,9 +49,13 @@ const stub = ({ turnstileOk = true, brevoOk = true } = {}) => {
 }
 
 // Capture console output so the "never log personal data" assertion is real.
-const realLog = console.log, realErr = console.error
+// console.warn is included deliberately: it was missing at first, which meant
+// the unconfigured-Turnstile warning was invisible to the tests AND that
+// anything leaked through warn would have passed the no-personal-data checks.
+const realLog = console.log, realErr = console.error, realWarn = console.warn
 console.log = (...a) => { logs.push(a.join(' ')) }
 console.error = (...a) => { logs.push(a.join(' ')) }
+console.warn = (...a) => { logs.push(a.join(' ')) }
 
 let pass = 0, fail = 0
 const ok = (label, cond) => {
@@ -92,7 +96,7 @@ const run = async (label, body, envOverride = env, opts = {}) => {
 // --- captcha --------------------------------------------------------------
 {
   const { res } = await run('no token', { ...VALID, turnstileToken: '' })
-  ok('missing captcha token -> 400', res.status === 400)
+  ok('missing captcha token -> 400 when configured', res.status === 400)
   ok('missing captcha never reaches Brevo', !calls.some(c => c.url.includes('brevo')))
 }
 {
@@ -101,10 +105,21 @@ const run = async (label, body, envOverride = env, opts = {}) => {
   ok('failed captcha never reaches Brevo', !calls.some(c => c.url.includes('brevo')))
 }
 {
+  // Matches Classic to Current and Bee Smart: an unconfigured captcha falls
+  // through to the honeypot rather than refusing every genuine enquiry. The
+  // warning is what makes it safe, so assert that too.
   const noSecret = { ...env, TURNSTILE_SECRET_KEY: undefined }
   const { res } = await run('captcha unconfigured', VALID, noSecret)
-  ok('unconfigured captcha fails CLOSED -> 500', res.status === 500)
-  ok('unconfigured captcha never reaches Brevo', !calls.some(c => c.url.includes('brevo')))
+  ok('unconfigured captcha falls OPEN -> 200', res.status === 200)
+  ok('unconfigured captcha still sends', calls.some(c => c.url.includes('brevo')))
+  ok('unconfigured captcha WARNS in the logs', logs.join(' ').includes('Turnstile not configured'))
+  ok('unconfigured captcha does not call siteverify', !calls.some(c => c.url.includes('siteverify')))
+}
+{
+  // But the honeypot must still be the thing catching bots in that state.
+  const noSecret = { ...env, TURNSTILE_SECRET_KEY: undefined }
+  const { res, json } = await run('honeypot with no captcha', { ...VALID, website: 'spam' }, noSecret)
+  ok('honeypot still holds without a captcha', res.status === 200 && json.ok === true && calls.length === 0)
 }
 
 // --- ordering: the paid API is last ---------------------------------------
@@ -178,5 +193,6 @@ const run = async (label, body, envOverride = env, opts = {}) => {
 
 console.log = realLog
 console.error = realErr
+console.warn = realWarn
 console.log(`\n  ${pass} passed, ${fail} failed`)
 process.exit(fail ? 1 : 0)

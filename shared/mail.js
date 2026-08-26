@@ -23,8 +23,23 @@ export const recipients = v => (v || '')
 
 // Turnstile is verified HERE, server-side. Verifying in the browser would be
 // decorative: anyone can skip client JavaScript and post directly.
+//
+// UNCONFIGURED FALLS OPEN, ON PURPOSE, matching the Classic to Current and Bee
+// Smart builds. Exley fails closed and is the odd one out.
+//
+// The trade is deliberate. Failing closed means a missing variable turns every
+// genuine enquiry into "Security check failed", and nobody notices for weeks,
+// because the form looks fine and simply refuses everyone. On a garage site a
+// lost enquiry costs the client money; spam costs them a delete. The honeypot
+// still runs either way and stops most of it.
+//
+// The warning is the safety net: it is the only signal in the logs that the
+// form is running unprotected, so do not quieten it.
 export async function verifyTurnstile(token, env, request) {
-  if (!env.TURNSTILE_SECRET_KEY) return { ok: false, reason: 'unconfigured' }
+  if (!env.TURNSTILE_SECRET_KEY) {
+    console.warn('Turnstile not configured, falling back to the honeypot only')
+    return { ok: true, reason: 'unconfigured' }
+  }
   if (!token) return { ok: false, reason: 'missing' }
   const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
     method: 'POST',
