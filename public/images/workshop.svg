@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="THE WORKSHOP, photograph to follow">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1D1D1B"/><stop offset="0.55" stop-color="#121316"/><stop offset="1" stop-color="#0A0A0B"/>
+    </linearGradient>
+    <pattern id="w" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#ffffff" opacity="0.03"/>
+      <rect x="8" y="8" width="8" height="8" fill="#ffffff" opacity="0.03"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="900" fill="url(#g)"/>
+  <rect width="1200" height="900" fill="url(#w)"/>
+  <g transform="translate(548 394) skewX(-18)">
+    <rect x="0"  y="0" width="24" height="56" fill="#1C75BC"/>
+    <rect x="28" y="0" width="24" height="56" fill="#49479D"/>
+    <rect x="56" y="0" width="24" height="56" fill="#E40521"/>
+  </g>
+  <text x="600" y="494" text-anchor="middle" fill="#ffffff" fill-opacity="0.5"
+        font-family="Lexend Deca, Helvetica Neue, Arial, sans-serif" font-size="21" font-weight="600" letter-spacing="3.4">THE WORKSHOP</text>
+  <text x="600" y="524" text-anchor="middle" fill="#ffffff" fill-opacity="0.26"
+        font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="14" letter-spacing="1.2">PHOTOGRAPH TO FOLLOW</text>
+</svg>
