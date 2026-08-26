@@ -7,12 +7,18 @@ import { useEffect, useRef } from 'react'
 // The site key is public by design. The secret half lives only in the Pages
 // environment and is checked in functions/api/enquiry.js.
 //
-// The fallback is Cloudflare's documented always-passes test key, so the form
-// works in development and in a preview branch with nothing configured. It must
-// never be what production runs on: TURNSTILE_SECRET_KEY being unset is what
-// actually stops the endpoint accepting anything, so the server side fails
-// closed even if this side falls back.
-const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
+// The test-key fallback is DEVELOPMENT ONLY, and that restriction was learned
+// the hard way. It shipped to production once with VITE_TURNSTILE_SITE_KEY
+// unset, and the failure was the nastiest kind: the widget rendered, looked
+// completely normal, and issued Cloudflare's dummy token
+// `XXXX.DUMMY.TOKEN.XXXX`. The server held the real secret, so every single
+// genuine enquiry came back "Security check failed" with nothing in the console
+// and nothing in the logs to explain it.
+//
+// In production a missing key now renders no widget at all, which is at least
+// visible. The build also refuses, so it should never get this far.
+const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ||
+  (import.meta.env.DEV ? '1x00000000000000000000AA' : '')
 const SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
 
 let scriptPromise = null
@@ -35,6 +41,7 @@ export default function Turnstile({ onReady }) {
   const id = useRef(null)
 
   useEffect(() => {
+    if (!SITE_KEY) return   // production with no key: render nothing, never a dummy token
     let cancelled = false
 
     loadTurnstile()

@@ -498,6 +498,25 @@ nothing, and a later cleanup killed the widget from the second pass. No error
 anywhere, just an empty div. The fix is rendering only into an empty host, and
 not calling `remove()` in cleanup at all. Do not "tidy" that cleanup back in.
 
+### The dummy token, and why the build now refuses
+
+This reached production. `VITE_TURNSTILE_SITE_KEY` was empty when Cloudflare
+built, `Turnstile.jsx` fell back to Cloudflare's always-passes **test** key, and
+the widget rendered perfectly normally while issuing the dummy token
+`XXXX.DUMMY.TOKEN.XXXX`. The server held the real secret, so every genuine
+enquiry came back "Security check failed" with **nothing in the console and
+nothing in the function logs**.
+
+Two changes, both of which should have been there from the start:
+
+- **The test key is `import.meta.env.DEV` only.** In production a missing key
+  renders no widget at all, which is at least visible.
+- **A production build with no site key throws.** A build that fails loudly is
+  far better than a form that rejects every customer silently.
+
+The lesson generalises: a development convenience that fabricates a
+credential must never be reachable in a production build.
+
 **Turnstile falls open when unconfigured**, matching Classic to Current and
 Bee Smart: an unset `TURNSTILE_SECRET_KEY` drops back to the honeypot alone and
 warns in the logs. Exley fails closed and is the odd one out of the four.

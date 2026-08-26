@@ -59,6 +59,19 @@ const guardKeys = mode => {
   const env = loadEnv(mode, process.cwd(), '')
   const embed = env.VITE_GOOGLE_MAPS_EMBED_KEY
   const places = env.GOOGLE_PLACES_API_KEY
+  // A production build with no Turnstile site key is worse than no captcha at
+  // all: the client falls back to a dummy token, the server holds the real
+  // secret, and every genuine enquiry is rejected with nothing to see. Refuse
+  // to build rather than ship that. This exact thing reached production once.
+  if (mode === 'production' && !env.VITE_TURNSTILE_SITE_KEY) {
+    throw new Error(
+      'VITE_TURNSTILE_SITE_KEY is empty.\n' +
+      'A production build without it renders a widget that issues a dummy token,\n' +
+      'which the server rejects, so every genuine enquiry fails with\n' +
+      '"Security check failed" and no error anywhere. Set it in .env.production.'
+    )
+  }
+
   if (embed && places && embed === places) {
     throw new Error(
       'VITE_GOOGLE_MAPS_EMBED_KEY is the same value as GOOGLE_PLACES_API_KEY.\n' +
