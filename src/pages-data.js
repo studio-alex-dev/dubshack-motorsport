@@ -44,14 +44,13 @@ export const EXTRA_PAGES = [
   // This is a working draft written from what this site ACTUALLY does, not a
   // legal document, and it should be read by someone qualified before launch.
   //
-  // TWO THINGS MUST BE CORRECTED BEFORE IT IS TRUE:
-  //   1. The email provider is named as "the service that delivers it" because
-  //      /api/enquiry is not written yet and nothing has been chosen. Name the
-  //      provider the day it is, or this page describes a process that does
-  //      not exist.
-  //   2. Ask the client whether the workshop has CCTV. Almost every garage
-  //      does, it is personal data, and it needs its own signage and a line
-  //      here. It is deliberately not claimed either way below.
+  // The processors are now named, because they are known: Cloudflare host it,
+  // Brevo deliver it, Studio Alex own the Brevo account it is sent through,
+  // and the workshop inbox is Gmail. All four are listed.
+  //
+  // ONE THING STILL MISSING: ask the client whether the workshop has CCTV.
+  // Almost every garage does, it is personal data, and it needs its own
+  // signage and a line here. It is deliberately not claimed either way.
   // -------------------------------------------------------------------------
   {
     slug: 'privacy',
@@ -96,8 +95,9 @@ export const EXTRA_PAGES = [
         heading: 'Who else sees it',
         before: ['A small number of companies handle it on our behalf, and none of them may use it for anything of their own:'],
         items: [
-          'The company that hosts this site, which passes the form on to us.',
-          'The service that delivers the enquiry to us as an email.',
+          'Cloudflare, who host this site and pass the form on to us.',
+          'Brevo, who deliver the enquiry to us as an email.',
+          'Studio Alex, who built and look after this site. The enquiry is sent through their Brevo account, so it passes through their system on the way to us.',
           'Google, because our workshop email is a Gmail address, so your enquiry sits on Google\u2019s servers the same as any email you send us directly.',
         ],
         after: [

@@ -74,6 +74,9 @@ export async function sendMail(env, { subject, heading, rows, replyTo, tags = []
       accept: 'application/json',
     },
     body: JSON.stringify({
+      // The display name is the client's, even though the address is the
+      // studio's authenticated domain. The workshop should see who it is
+      // about, not who built the site.
       sender: { name: 'DubShack Motorsport website', email: env.ENQUIRY_FROM_EMAIL },
       to,
       ...(cc.length ? { cc } : {}),

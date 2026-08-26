@@ -53,7 +53,6 @@ Settings → Environment variables → Production.
 
 | Variable | Side | Notes |
 |---|---|---|
-| `SITE_PASSWORD` | server | Anything you like. **Set this now**, see step 4 |
 | `GOOGLE_PLACES_API_KEY` | server | The Places key. Must **not** be referrer restricted |
 | `GOOGLE_PLACE_ID` | server | `ChIJOTWxup1pekgRAdYPFtb0Aes` |
 | `VITE_GOOGLE_MAPS_EMBED_KEY` | **public** | A **separate** key, see below |
@@ -79,27 +78,32 @@ inside the frame.
 
 ---
 
-## 4. Deploy behind the password
+## 4. Deploy
 
-`functions/_middleware.js` runs in front of every request. It is active whenever
-`SITE_PASSWORD` is set, and **deleting that variable is the entire launch
-switch** — there is no code change.
+There is **no password gate**. Alex asked for this one to go straight live, so
+`functions/_middleware.js` was deleted rather than left switched off.
 
-Because it runs at the edge, the unreleased site is never sent to the browser,
-unlike a JavaScript overlay which still ships the whole site in view-source.
-While gated, everything answers `503` with `X-Robots-Tag: noindex, nofollow`, so
-nothing is indexed or cached about the domain before launch.
+That is not only tidiness. A root `_middleware.js` on Pages intercepts **every**
+request, static assets included, which is how it is able to gate a whole site.
+Left in place with `SITE_PASSWORD` unset, every image and every JS file would
+still wake the Functions runtime just to call `next()`. On a site nobody wants
+gated that is pure overhead.
 
-Deploy, then check on the `*.pages.dev` URL:
+**If a gate is ever wanted again** (a redesign, a staging branch), it is in git
+history and comes back with:
 
-- The holding page appears, not the site.
-- The password lets you in.
-- The map placeholder appears and **does not** load until you press the button.
-- Reviews load on the home page. If they do not, check the Pages function logs.
-- The enquiry form fails to its "ring us instead" message. **That is expected
-  until step 6.**
+```bash
+git show 'a96a536:functions/_middleware.js' > functions/_middleware.js
+```
 
----
+Set `SITE_PASSWORD` in Pages and it is active; delete the variable and it is not.
+
+Deploy, then check on the `*.pages.dev` URL before pointing the domain:
+
+- The home page loads and the reviews appear. If not, check the function logs.
+- The map placeholder appears and does **not** load until you press the button.
+- Send yourself a test enquiry and confirm it arrives.
+- `/robots.txt` and `/sitemap.xml` both serve.
 
 ## 5. Point the domain
 
@@ -116,14 +120,11 @@ grep -rn 'dubshackmotorsport.co.uk' index.html public/ src/
 
 ---
 
-## 6. Write `/api/enquiry` before launch
+## 6. The enquiry form
 
-**The form does not work yet.** There is no `functions/api/enquiry.js`, so in
-production it fails to its "ring us instead" message. That is a safe failure,
-not an acceptable one.
-
-Follow the order used on the Exley build — cheap rejects first, the paid API
-last:
+`functions/api/enquiry.js` is written and tested. `npm run test:form` runs 32
+assertions against it with `fetch` stubbed. The order is cheap rejects first,
+the paid API last:
 
 1. **Honeypot.** The `website` field. Filled means silently accepted with
    nothing sent, so the bot learns nothing.
@@ -133,31 +134,34 @@ last:
 4. **Email API.** Brevo or similar, `replyTo` set to the enquirer so a reply
    just works.
 
-The sending domain must be authenticated in the email provider (SPF + DKIM) or
-mail bounces. Add `TURNSTILE_SECRET_KEY` and the provider's key as server-side
+The sender is **`emails@studioalex.co.uk`**, the same address the studio uses
+for its other client forms. Its domain is already authenticated in Brevo, so
+there is no DNS work to do on `dubshackmotorsport.co.uk` before launch. Only
+the envelope sender is the studio's: `replyTo` is set to the customer, so
+replying from the workshop inbox goes to them. Add `TURNSTILE_SECRET_KEY` and the provider's key as server-side
 variables, and `VITE_TURNSTILE_SITE_KEY` as the public half.
 
-**Then name the provider in the privacy notice.** It currently says "the service
-that delivers the enquiry to us as an email" because nothing has been chosen.
-See `src/pages-data.js`.
+The privacy notice names Cloudflare, Brevo, Studio Alex and Gmail as the four
+parties that handle an enquiry. Studio Alex is named because the mail goes
+through the studio's Brevo account, which makes it a processor. If that ever
+changes, `src/pages-data.js` must change with it.
 
 ---
 
 ## 7. Launch
 
-1. **Delete `SITE_PASSWORD`** and redeploy. That is the switch.
-2. Confirm `https://dubshackmotorsport.co.uk/robots.txt` and `/sitemap.xml`
-   both serve, and that pages no longer carry `X-Robots-Tag: noindex`.
-3. Submit the sitemap in Google Search Console.
-4. **Add the website URL to the Google Business Profile.** It currently points
+The site is live the moment the domain resolves. There is no switch to throw.
+
+1. Confirm pages do **not** carry `X-Robots-Tag: noindex`, and that
+   `/robots.txt` and `/sitemap.xml` both serve.
+2. Submit the sitemap in Google Search Console.
+3. **Add the website URL to the Google Business Profile.** It currently points
    at `facebook.com`. This is the highest-value single action after launch: the
    profile has 160 reviews at 4.9 and is how most people find the business.
-5. **Fix the address on both listings.** Companies House gives the registered
+4. **Fix the address on both listings.** Companies House gives the registered
    office as `Unit 1 Edensor Road, ST3 2QE`. Facebook has the wrong street
    entirely; Google drops the unit number. The site is correct.
-6. Add GA4 by setting `VITE_GA4_ID`, which also switches the consent banner on.
-
----
+5. Add GA4 by setting `VITE_GA4_ID`, which also switches the consent banner on.
 
 ## Before you launch, not after
 

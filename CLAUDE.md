@@ -487,9 +487,26 @@ Columns are 3 / 2 / 1 by `flex-basis` on the track's children, not by grid.
 
 ## The enquiry form
 
-`Enquiry.jsx` posts JSON to **`/api/enquiry`**. **That function does not exist
-yet** — see "Still to do". It must be written server-side: posting to an email
-API directly from the browser would put the API key in view-source.
+`Enquiry.jsx` posts JSON to **`/api/enquiry`**, a Pages Function. It must stay
+server-side: posting to an email API from the browser would put the key in
+view-source.
+
+**Turnstile and StrictMode.** The widget silently never appeared at first. React
+StrictMode double-invokes effects, and because `render()` is called from an
+async callback the first cleanup ran while the widget id was still null, removed
+nothing, and a later cleanup killed the widget from the second pass. No error
+anywhere, just an empty div. The fix is rendering only into an empty host, and
+not calling `remove()` in cleanup at all. Do not "tidy" that cleanup back in.
+
+**The sender is `emails@studioalex.co.uk`**, the studio's own authenticated
+domain, not the client's. It means no DNS work on `dubshackmotorsport.co.uk`
+before launch. `replyTo` is the customer, so replying still goes to them.
+
+**No password gate.** Alex asked for this one to go straight live, so
+`functions/_middleware.js` was deleted rather than left switched off: a root
+middleware on Pages intercepts every request including static assets, so leaving
+it in would wake the Functions runtime for every image to no purpose. It is
+recoverable from commit `a96a536` if a gate is ever wanted.
 
 The client-side half is done and tested against the dev stub in
 `vite.config.js`: honeypot (a `website` field positioned off-screen rather than
@@ -665,12 +682,8 @@ Maps URLs, the photographs, the live reviews, the contact page, and consent.
 
 **Before launch, in rough order of how much they hurt:**
 
-- [ ] **Get the privacy notice read by someone qualified**, and fill its two
-      gaps: name the email provider once `/api/enquiry` exists, and ask the
-      client about CCTV at the workshop. See above.
-- [ ] **Write `/api/enquiry`.** The form currently fails to its "ring us
-      instead" message in production. Safe, but still a failure. Follow the
-      Exley order: honeypot, validation, captcha, paid email API last.
+- [ ] **Get the privacy notice read by someone qualified**, and ask the client
+      about CCTV at the workshop. The processors are named now.
 - [ ] **Create the Maps Embed key**, separate and referrer restricted. See above.
 - [ ] **Confirm the domain.** `dubshackmotorsport.co.uk` is assumed throughout.
       If it changes, edit `src/config.js` and grep the literal in `index.html`,
