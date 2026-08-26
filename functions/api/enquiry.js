@@ -37,7 +37,18 @@ export async function onRequestPost({ request, env }) {
     FIELDS.map(f => [f, (body[f] ?? '').toString().trim()])
   )
 
-  const bad = validate(data, { required: REQUIRED, caps: { message: 2000, email: 120, vehicle: 80 } })
+  // Field names as the form labels them, so an error names the box the person
+  // is actually looking at.
+  const LABELS = {
+    name: 'Your name', phone: 'Phone', email: 'Email',
+    vehicle: 'Vehicle', service: 'What you need', message: 'Details',
+  }
+
+  const bad = validate(data, {
+    required: REQUIRED,
+    caps: { message: 2000, email: 120, vehicle: 80 },
+    labels: LABELS,
+  })
   if (bad) return json({ error: bad }, 400)
 
   // Unconfigured returns ok:true and warns, so this only rejects a token that

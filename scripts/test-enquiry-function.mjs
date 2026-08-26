@@ -81,8 +81,25 @@ const run = async (label, body, envOverride = env, opts = {}) => {
 {
   const { res, json } = await run('missing', { ...VALID, name: '', message: '' })
   ok('missing required -> 400', res.status === 400)
-  ok('missing names the fields', /name/.test(json.error) && /message/.test(json.error))
   ok('missing never reaches Brevo', calls.length === 0)
+
+  // It shipped saying "Missing: message", naming an internal field to a person
+  // looking at a box labelled Details. Errors use the form's own words.
+  ok('error uses the form label, not the field name',
+     json.error.includes('Details') && !json.error.includes('message'))
+  ok('error names both missing fields',
+     json.error.includes('Your name') && json.error.includes('Details'))
+  // It is concatenated with "You can also ring..." on the client, so it has to
+  // be a complete sentence or the two run together.
+  ok('error is a complete sentence', /\.$/.test(json.error))
+}
+{
+  const { json } = await run('one missing', { ...VALID, message: '' })
+  ok('single missing field reads naturally', json.error === 'Details is missing.')
+}
+{
+  const { json } = await run('over cap', { ...VALID, message: 'x'.repeat(2001) })
+  ok('length error uses the label too', json.error === 'Details is too long.')
 }
 {
   const { res } = await run('bad email', { ...VALID, email: 'not-an-email' })

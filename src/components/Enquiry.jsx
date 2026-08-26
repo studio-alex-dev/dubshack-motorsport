@@ -47,9 +47,11 @@ export default function Enquiry() {
       captcha.current?.reset()
       setState({
         status: 'err',
+        // The server's message is a complete sentence, so this just follows it.
+        // Joined without punctuation it read "Missing: message Please ring ...".
         message: `${err.message && err.message !== 'Bad response'
           ? err.message
-          : 'Something went wrong sending that.'} Please ring ${SITE.mobile} or email ${SITE.email}.`,
+          : 'Something went wrong sending that.'} You can also ring ${SITE.mobile} or email ${SITE.email}.`,
       })
     }
   }

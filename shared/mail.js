@@ -113,13 +113,30 @@ export async function sendMail(env, { subject, heading, rows, replyTo, tags = []
 }
 
 // Returns an error string, or null when the values are fine.
-export function validate(data, { required = [], caps = {}, defaultCap = 200 }) {
+//
+// `labels` maps a field name to what the FORM calls it. Without it the message
+// reads "Missing: message", naming an internal field nobody has seen, which is
+// how it shipped and how it read to a customer staring at a box labelled
+// "Details". Errors name things the way the person on the page names them.
+//
+// Every string here is a complete sentence ending in a full stop, because the
+// client appends "Please ring ..." after it and two sentences shoved together
+// with a space read as one broken one.
+export function validate(data, { required = [], caps = {}, defaultCap = 200, labels = {} }) {
+  const name = f => labels[f] || f
+
   for (const [k, v] of Object.entries(data)) {
     const cap = caps[k] ?? defaultCap
-    if ((v || '').length > cap) return `${k} is too long.`
+    if ((v || '').length > cap) return `${name(k)} is too long.`
   }
-  const missing = required.filter(f => !data[f])
-  if (missing.length) return `Missing: ${missing.join(', ')}`
+
+  const missing = required.filter(f => !data[f]).map(name)
+  if (missing.length === 1) return `${missing[0]} is missing.`
+  if (missing.length > 1) {
+    const last = missing.pop()
+    return `${missing.join(', ')} and ${last} are missing.`
+  }
+
   if (data.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email)) {
     return 'That email address does not look right.'
   }
