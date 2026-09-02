@@ -708,6 +708,61 @@ targets `.prose > .reveal + .reveal` as well. **This is the same trap as the
 card grids needing the stretch passed through** — if a rule involving `+` or
 `~` appears to do nothing, check whether `Reveal` is between the elements.
 
+## Favicons and analytics
+
+### The icons were broken on the live site
+
+The first set was rasterised with `qlmanage -t`, which produces Quick Look
+**thumbnails**, not images: every icon shipped as a tiny mark in the corner of
+a white field. There is no ImageMagick or rsvg here, so `scripts/build-icons.mjs`
+now encodes the PNGs directly. Node's zlib is all a PNG actually needs.
+
+```bash
+npm run icons
+```
+
+**Two treatments, because one does not work at both ends.** At 32px and up
+there is room for the dark rounded tile with a skewed stripe, which is the mark
+as it appears on the site. At 16px that collapses into a smudge, so the stripes
+go edge to edge and upright: illegible as a shape at that size either way, but
+unmistakably the right three colours in a tab.
+
+It also writes a real **`favicon.ico`** wrapping the 16, 32 and 48px PNGs.
+Browsers request `/favicon.ico` whatever the HTML says, and without a real file
+Pages answered with the SPA fallback: HTTP 200 and a page of HTML, which is
+worse than a 404 because a consumer has to parse it before finding out it is
+not an image.
+
+### GA4 is wired but switched off
+
+`src/analytics.js`. **With `VITE_GA4_ID` unset nothing loads at all** — no
+dataLayer, no gtag, no request to Google, no cookies. Verified in the browser,
+not assumed.
+
+**Order is the whole point.** The consent default must be set before the Google
+tag runs, or GA4 writes cookies before anyone is asked and the privacy notice
+becomes untrue. Both happen in this one file, in this order, so the ordering is
+guaranteed rather than hoped for. That is why it is not an inline snippet
+pasted into the head of six generated HTML files.
+
+Verified with an ID set: `consent default` is the **first** entry in the
+dataLayer, everything denied except `security_storage`, and no `_ga` cookie
+appears until Accept is pressed, at which point a single `consent update`
+follows and the cookies are set.
+
+**Setting the variable does two things at once, deliberately:** it loads the tag
+and it switches the cookie banner on, because `NEEDS_CONSENT()` reads the same
+variable. They can never be out of step, and a banner asking permission for
+analytics that do not exist is worse than no banner.
+
+**The tag is not blocked while denied, and that is on purpose.** Blocking it
+loses conversion modelling and stops remarketing audiences populating, which
+costs money on Ads. A denied tag still sends cookieless pings and sets nothing
+on the device. That is the whole design of Consent Mode.
+
+`generate_lead` fires **on a successful enquiry only**, never on submit, or
+rejected attempts would inflate the number the client judges the site by.
+
 ## Still to do
 
 Resolved since the first draft: the address, the legal entity, the Place ID and
@@ -728,8 +783,11 @@ Maps URLs, the photographs, the live reviews, the contact page, and consent.
       legacy path. It works today either way.
 - [ ] Full review text: the three fallback reviews in `src/reviews.js` still
       carry Google's truncation. Only shows if the live pull fails.
-- [ ] GA4 + Search Console. Setting `VITE_GA4_ID` switches the whole consent
-      banner path on by itself.
+- [ ] **Verify Search Console** by DNS TXT record rather than a meta tag: it
+      lives on the domain, survives redeploys, and covers apex and `www`
+      together. Then submit `/sitemap.xml`. Nothing in the code needs changing.
+- [ ] **Switch GA4 on** by putting the measurement ID in `.env.production`.
+      Everything else is built and tested.
 - [ ] Business facts nobody has confirmed: years actually trading, staff names,
       accreditations, VAT registration.
 - [ ] Decide whether alignment gets its own page.

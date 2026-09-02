@@ -12,7 +12,8 @@
     "images": "node scripts/build-images.mjs",
     "sheet": "node scripts/build-sheet.mjs",
     "test:form": "node scripts/test-enquiry-function.mjs",
-    "test": "npm run test:form"
+    "test": "npm run test:form",
+    "icons": "node scripts/build-icons.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

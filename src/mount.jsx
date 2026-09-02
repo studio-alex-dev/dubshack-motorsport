@@ -1,9 +1,14 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import { initAnalytics } from './analytics'
 
 // Shared bootstrap for every page entry.
 export default function mount(node) {
+  // Before React, so the consent default is set as early as the bundle allows
+  // and a returning visitor's stored choice is applied before the first hit.
+  initAnalytics()
+
   // Reveals only hide themselves once JS is confirmed alive — if the bundle
   // fails to run, the page renders fully visible rather than blank.
   document.documentElement.classList.add('has-js')

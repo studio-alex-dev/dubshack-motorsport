@@ -5,6 +5,7 @@ import MStripe from './MStripe'
 import Turnstile from './Turnstile'
 import { SITE, telHref } from '../config'
 import { SERVICE_LIST } from '../services'
+import { trackEnquiry } from '../analytics'
 
 const POINTS = [
   'Tell us the car and what it is doing, and you get a straight answer about whether it is worth bringing in.',
@@ -38,6 +39,9 @@ export default function Enquiry() {
       const payload = await res.json().catch(() => ({}))
       if (!res.ok || !payload.ok) throw new Error(payload.error || 'Bad response')
 
+      // On success only. Firing on submit would count rejected attempts as
+      // leads and quietly inflate the number the client is judging us by.
+      trackEnquiry(data.service)
       setState({ status: 'ok', message: 'Thanks, that has come through. We will come back to you shortly.' })
       form.reset()
       captcha.current?.reset()
