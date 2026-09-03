@@ -527,9 +527,17 @@ because the form looks fine and simply refuses everyone. On a garage site a lost
 enquiry costs the client money; spam costs them a delete. **Do not quieten the
 warning** — it is the only signal that the form is running unprotected.
 
-One Turnstile keypair serves every Studio Alex site. A widget accepts a list of
-hostnames, so add this domain to the existing widget rather than making a new
-pair.
+**Every Studio Alex site has its own Turnstile widget.** The dashboard shows one
+per site: newfarmholidays, thedpgroup, Purelec, oakleysfarm, Xpress Legal,
+exley-transport and dubshack-motorsport.
+
+An earlier version of this note said one keypair served every site. It does not,
+and that claim was acted on: the boiler-hire-uk build was configured with THIS
+site's key, which would have failed outright, because its hostname is not on
+this widget's list. Corrected 2026-09-03.
+
+A widget does accept several hostnames, which is what production plus the
+`*.pages.dev` preview host uses. That is per site, not across sites.
 
 **The sender is `emails@studioalex.co.uk`**, the studio's own authenticated
 domain, not the client's. It means no DNS work on `dubshackmotorsport.co.uk`
