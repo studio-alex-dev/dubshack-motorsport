@@ -161,9 +161,36 @@ Deploy, then check on the `*.pages.dev` URL before pointing the domain:
 
 ## 5. Point the domain
 
-Pages → Custom domains → add `dubshackmotorsport.co.uk` and `www`, and let
-Cloudflare issue the certificate. Decide which of the two is canonical and
-redirect the other; the site's canonical tags all use the apex, no `www`.
+Pages → Custom domains → add `dubshackmotorsport.co.uk` and let Cloudflare
+issue the certificate.
+
+### `www` is NOT a Pages custom domain, and must not be
+
+This was missed at launch and `www.dubshackmotorsport.co.uk` returned **522**
+for weeks: the DNS record existed and was proxied, so Cloudflare answered the
+request, but nothing was bound to serve that hostname.
+
+**Do not fix it by adding `www` as a second Pages custom domain.** That serves
+the identical site on two hostnames, and every canonical tag, every `<loc>` in
+the sitemap and the Google Business Profile all use the apex. Two hostnames
+serving one site splits the signals for no gain.
+
+Redirect it instead, which is what Cloudflare's own guidance says for exactly
+this case: a Custom Domain requires an exact hostname match, so a project bound
+to the apex never receives `www` traffic.
+
+1. **DNS** → the `www` record stays **proxied**. Cloudflare's documented
+   originless setup is an `A` record pointing at `192.0.2.0` (or `AAAA` at
+   `100::`), both reserved placeholders. Because it is proxied, the request
+   never reaches that address: Cloudflare intercepts it and applies the rule.
+2. **Rules → Redirect Rules** → create a rule:
+   - **When**: `Hostname` equals `www.dubshackmotorsport.co.uk`
+   - **Then**: Dynamic redirect, status **301**, preserve query string
+   - **Expression**: `concat("https://dubshackmotorsport.co.uk", http.request.uri.path)`
+
+Use a **dynamic** redirect, not a static one. A static redirect sends every
+`www` request to the homepage, so `www.../contact/` silently loses its path.
+The expression above keeps it.
 
 If the domain is not `dubshackmotorsport.co.uk`, change `SITE.url` in
 `src/config.js` and grep for the literal:
