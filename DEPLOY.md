@@ -192,6 +192,23 @@ Use a **dynamic** redirect, not a static one. A static redirect sends every
 `www` request to the homepage, so `www.../contact/` silently loses its path.
 The expression above keeps it.
 
+Cloudflare's own **"Redirect from WWW to root"** template does all of this
+correctly, with one exception: **it leaves "Preserve query string" unticked.**
+Tick it, or every redirect drops `?utm_source=` and the like, and campaign
+attribution dies at the redirect.
+
+3. **SSL/TLS → Edge Certificates → Always Use HTTPS** must be **on**.
+
+That last one is not optional and is easy to miss. The redirect rule's pattern
+is `https://www.*`, so it only matches HTTPS. A plain `http://www...` request
+does not match it, has no origin to fall back to, and **still returns 522**.
+The apex does not show this because Pages serves it and upgrades the scheme
+itself; `www` has no origin to do that.
+
+Check the SSL/TLS encryption mode first. On **Full** or **Full (strict)** this
+is safe. On **Flexible** it can cause a redirect loop, which is what
+Cloudflare's warning on that toggle is about.
+
 If the domain is not `dubshackmotorsport.co.uk`, change `SITE.url` in
 `src/config.js` and grep for the literal:
 
