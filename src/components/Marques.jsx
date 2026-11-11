@@ -4,7 +4,7 @@ import MStripe from './MStripe'
 
 const MARQUES = [
   { t: 'BMW and BMW M',
-    d: 'The core of the workshop. Servicing and repair across the range, and chassis, suspension and drivetrain work on the M cars. We race a BMW ourselves, so the M platforms are familiar ground rather than an occasional job.' },
+    d: 'The core of the workshop. Servicing and repair across the range, and chassis, suspension and drivetrain work on the M cars. We run BMWs ourselves, so the M platforms are familiar ground rather than an occasional job.' },
   { t: 'Audi, S and RS',
     d: 'Servicing, diagnostics and performance work across the Audi range, including the quattro drivetrains and the S and RS cars. The VW group platforms underneath are the same ones we work on daily.' },
   { t: 'Mercedes and AMG',

@@ -33,15 +33,6 @@ export const Suspension = (p) => (
   </svg>
 )
 
-// Motorsport: chequered flag
-export const Flag = (p) => (
-  <svg {...sq(p)}>
-    <path d="M4.6 21V3.4" />
-    <path d="M4.6 4.4h15.2v10.4H4.6Z" />
-    <path d="M4.6 4.4h3.8v2.6h3.8V4.4M12.2 7h3.8v2.6h3.8V7M4.6 9.6h3.8v2.6h3.8V9.6M12.2 12.2h3.8v2.6" fill="currentColor" stroke="none" opacity=".92" />
-  </svg>
-)
-
 // Alignment: wheel viewed from above with toe angle and a datum line
 export const Alignment = (p) => (
   <svg {...wide(p)}>
@@ -122,15 +113,6 @@ export const Exhaust = (p) => (
     <rect x="9.4" y="6.4" width="16.4" height="4.6" rx="2.3" />
     <rect x="9.4" y="13.4" width="16.4" height="4.6" rx="2.3" />
     <path d="M6.2 8.7H2.4M6.2 15.7H2.4M7.4 12.2H4.6" opacity=".65" />
-  </svg>
-)
-
-// Roll cage: A-pillar hoop with the diagonal brace
-export const Cage = (p) => (
-  <svg {...sq(p)}>
-    <path d="M4.2 20.4V8.6l7.8-4.9 7.8 4.9v11.8" />
-    <path d="M4.2 11.6h15.6" />
-    <path d="M4.2 20.4 19.8 11.6M19.8 20.4 4.2 11.6" opacity=".7" />
   </svg>
 )
 

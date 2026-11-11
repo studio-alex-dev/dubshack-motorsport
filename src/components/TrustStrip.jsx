@@ -1,12 +1,12 @@
-import { Marque, Flag, Alignment, Collection } from './Icons'
+import { Marque, Diagnostics, Alignment, Collection } from './Icons'
 
 // Bespoke icons rather than the M-stripe here. The stripe still marks every
 // section label, so repeating it in four cells directly under the hero made it
-// wallpaper. These are drawn for this job: a bonnet badge, a chequered flag, a
-// wheel with toe angle against a datum, a low-loader bed.
+// wallpaper. These are drawn for this job: a bonnet badge, a diagnostic trace,
+// a wheel with toe angle against a datum, a low-loader bed.
 const CELLS = [
   { I: Marque,     t: 'German specialists',    d: 'BMW, Audi and Mercedes every day, M cars included.' },
-  { I: Flag,       t: 'We race what we build', d: 'The workshop prepares and campaigns its own car.' },
+  { I: Diagnostics, t: 'Marque diagnostics',   d: 'The software to code and fault-find, not just read a code.' },
   { I: Alignment,  t: 'String alignment',      d: 'Proper geometry setup, not a supermarket tracking check.' },
   { I: Collection, t: 'Roadside collection',   d: 'Not driveable? We can usually come and get it.' },
 ]

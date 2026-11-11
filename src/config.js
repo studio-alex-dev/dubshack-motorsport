@@ -75,7 +75,7 @@ export const SITE = {
   ],
 
   // Live counts at time of build. Worth refreshing before launch.
-  reviews: { rating: '4.9', count: 160, source: 'Google' },
+  reviews: { rating: '4.9', count: 162, source: 'Google' },
 }
 
 // UK mobiles display as 07…, but tel: links should be fully qualified.
@@ -146,7 +146,6 @@ export const SERVICE_NAV = [
   { label: 'Servicing & Repairs',       href: '/servicing-repairs/' },
   { label: 'German Car Specialist',     href: '/german-car-specialist/' },
   { label: 'Performance Modifications', href: '/performance-modifications/' },
-  { label: 'Motorsport Preparation',    href: '/motorsport-preparation/' },
 ]
 
 export const NAV = [

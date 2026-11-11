@@ -5,9 +5,9 @@ import MStripe from './MStripe'
 
 const POINTS = [
   { t: 'String alignment, not a laser gate',
-    d: 'The car is measured against strings squared to its own centreline, which is how a race car is set up. It reads camber, caster and toe on a car that may sit nothing like factory height.' },
+    d: 'The car is measured against strings squared to its own centreline, which is how a geometry setup is properly done. It reads camber, caster and toe on a car that may sit nothing like factory height.' },
   { t: 'Set up for how you use it',
-    d: 'A road car, a fast road car and a track car want three different alignments. We ask what you do with it before deciding the numbers, rather than putting everything back to standard.' },
+    d: 'A standard road car, a lowered car and a fast road car want three different alignments. We ask what you do with it before deciding the numbers, rather than putting everything back to standard.' },
   { t: 'Included after suspension work',
     d: 'Every suspension job here finishes on the alignment equipment. It is the reason lowering springs improve a car instead of ruining it.' },
   { t: 'You get the figures',

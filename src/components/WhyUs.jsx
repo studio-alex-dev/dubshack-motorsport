@@ -7,7 +7,7 @@ import MStripe from './MStripe'
 //
 // Three items were cut. "Rated 4.9 by 160 people" was commentary about the
 // reviews rather than a reason, and the rating is already stated twice on the
-// page. "We race what we work on" and "Roadside collection" both now sit in
+// page. "Marque diagnostics" and "Roadside collection" both now sit in
 // the trust strip directly under the hero, and repeating them here made the
 // section read as padding.
 const ITEMS = [

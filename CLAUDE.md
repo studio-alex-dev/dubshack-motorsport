@@ -25,7 +25,7 @@ registers it as the `dubshack-motorsport` preview server on **port 3004**.
 
 ## Pages
 
-Five real HTML entry points, not client-side routes. Every page has its own
+Six real HTML entry points, not client-side routes. Every page has its own
 crawlable URL, title, description, canonical, Open Graph and schema in the
 **served** HTML rather than applied by JavaScript after load.
 
@@ -34,10 +34,11 @@ crawlable URL, title, description, canonical, Open Graph and schema in the
 /servicing-repairs/
 /german-car-specialist/
 /performance-modifications/
-/motorsport-preparation/
+/contact/
+/privacy/
 ```
 
-**The four service pages and the home page's FAQ schema are generated.** Run
+**The three service pages and the home page's FAQ schema are generated.** Run
 `npm run pages` (the `dev` and `build` scripts do it for you) and
 `scripts/build-pages.mjs` writes each `<slug>/index.html` from
 `src/services.js`, plus refreshes the block between the `FAQ-SCHEMA` markers in
@@ -208,8 +209,11 @@ lone opaque panel between two transparent ones punches a hole in the page.
 create more tracks than there are items, which shrinks them and packs them left
 against dead space — that is exactly what went wrong first time round, with
 three reviews sitting in four 268px tracks inside a 1240px container. Every
-grid here names its column count and its breakpoints. Four service cards are
-`4 / 2 / 1`, which can never orphan one card on a row of its own.
+grid here names its column count and its breakpoints. Three service cards are
+`3 / 1 / 1` (break at 840px), not `3 / 2 / 1` — two columns would strand the
+third card alone on a row. Below 840px it is a single column capped at 460px
+and centred, because a full-bleed square photo is right on a phone and absurd
+on a tablet.
 
 ### The offset frame
 
@@ -242,7 +246,7 @@ the feature lists, and heads each trio item. It is the one mark that repeats.
 
 ```
 src/config.js    contacts, address, hours, nav, review counts
-src/services.js  all four service pages' content — drives HTML generation too
+src/services.js  all three service pages' content — drives HTML generation too
 src/faqs.js      home page FAQ copy — drives the home FAQPage schema
 src/images.js    which image appears where
 src/index.css    design tokens at the top, then components in page order
@@ -337,10 +341,43 @@ it: the headline work is German performance, but the review keywords are
 bread-and-butter garage work (timing belts, clutches, diagnostics) and one
 customer brought a 29 year old Japanese import in for alignment.
 
-The site therefore **leads with German performance and motorsport** — that is
-the differentiator and it justifies the pricing — then says plainly, more than
-once, that all makes are welcome. Do not resolve this by picking one. Both are
-true and both bring work in.
+The site therefore **leads with German performance and specialist diagnostics**
+— that is the differentiator and it justifies the pricing — then says plainly,
+more than once, that all makes are welcome. Do not resolve this by picking one.
+Both are true and both bring work in.
+
+### Racing, track and motorsport claims are banned — this is an insurance matter
+
+**November 2026: the client's insurer will not cover race, track or trackside
+work.** The fourth service page, `/motorsport-preparation/`, was deleted and
+every racing claim was stripped from the site. This is a liability constraint,
+not an editorial preference. Do not reinstate any of it, and do not let it
+creep back in through a new photo caption, FAQ answer or meta description.
+
+What went, so it is recognisable if someone tries to put it back:
+
+- the whole `/motorsport-preparation/` page, its nav entry, its `makesOffer`
+  schema entry, its sitemap URL and its service card
+- the hero's "races what it builds", the trust strip's "We race what we build"
+  (now "Marque diagnostics", using the previously unused `Diagnostics` icon),
+  the footer's "motorsport preparation ... races what it builds"
+- "which is how a race car is set up" in both the alignment section and the
+  home FAQ; "a track car wants a different alignment"; "to a track alignment"
+  on the performance page
+- three "races its own BMW" claims inside the **German car specialist** page —
+  these are easy to miss because that page is not the obvious place to look
+- the `Flag` (chequered flag) and `Cage` (roll cage) icons
+- the `motorsport` and `bandMotorsport` image slots and their two source
+  photographs, whose slugs carried `track-race-car` and `race-car`
+
+**The business name stays.** It is the registered company
+(`DUBSHACKMOTORSPORT LTD`), the domain, the logo artwork and the Google
+listing. "DubShack Motorsport" as a name is not a service claim. The insurer's
+objection is to offering the work, not to the trading name — if that ever turns
+out to be wrong, it is a rebrand, not a copy edit.
+
+`public/_redirects` 301s the dead URL to `/performance-modifications/`. It was
+live and indexed, so it must never become a 404.
 
 **Alignment has its own home page section** even though the client's service
 list has four items. Two of the three visible Google reviews are about

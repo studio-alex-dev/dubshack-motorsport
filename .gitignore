@@ -13,3 +13,6 @@ public/dev
 # build gitignores assets/ because it holds 1.4GB of photo originals — that
 # reasoning does not apply here. When the client's photographs arrive, put the
 # large originals in assets/ and ignore that instead.
+
+# wrangler pages dev scratch
+.wrangler/

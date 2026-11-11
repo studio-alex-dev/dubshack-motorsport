@@ -40,8 +40,8 @@ export default function Footer({ showMap = true }) {
             <img className="footer__strap" src="/brand/the-ultimate-german-car-specialists-light.svg"
                  alt="The ultimate German car specialists" width="150" height="96" loading="lazy" />
             <p>
-              Servicing, performance and motorsport preparation from a workshop
-              in Stoke-on-Trent that races what it builds.
+              Servicing, diagnostics and performance work for BMW, Audi and
+              Mercedes, from an independent workshop in Stoke-on-Trent.
             </p>
           </div>
 

@@ -1,0 +1,5 @@
+# /motorsport-preparation/ was removed in November 2026 because the client's
+# insurer will not cover race, track or trackside work. The URL was live and
+# indexed, so it redirects rather than 404s. Do not reinstate the page.
+/motorsport-preparation/  /performance-modifications/  301
+/motorsport-preparation   /performance-modifications/  301

@@ -41,7 +41,7 @@ Cloudflare dashboard → Workers & Pages → Create → Pages → Connect to Git
 | Output directory | `dist` |
 | Node version | set `NODE_VERSION` to `20.11.1`, matching `.node-version` |
 
-`npm run build` runs `npm run pages` first, so the four service pages, the
+`npm run build` runs `npm run pages` first, so the three service pages, the
 contact page, the privacy page and the home FAQ schema are regenerated from
 source on every deploy. They can never be stale in production.
 

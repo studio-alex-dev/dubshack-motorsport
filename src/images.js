@@ -14,7 +14,6 @@ const IMAGES = {
   servicing:   img('bmw-servicing-repairs-stoke-on-trent'),
   german:      img('audi-rs-specialist-stoke-on-trent'),
   performance: img('performance-exhaust-system-stoke-on-trent'),
-  motorsport:  img('bmw-track-race-car-preparation-stoke-on-trent'),
   alignment:   img('bmw-m-wheel-alignment-geometry-stoke-on-trent'),
   workshop:    img('dubshack-motorsport-workshop-longton-stoke-on-trent'),
 
@@ -22,7 +21,6 @@ const IMAGES = {
   bandServicing:   img('band-servicing-workshop-stoke-on-trent'),
   bandGerman:      img('band-mercedes-amg-stoke-on-trent'),
   bandPerformance: img('band-bmw-m4-performance-stoke-on-trent'),
-  bandMotorsport:  img('band-bmw-race-car-stoke-on-trent'),
 }
 
 export default IMAGES

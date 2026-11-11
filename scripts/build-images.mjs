@@ -55,15 +55,11 @@ const MANIFEST = [
     slug: 'audi-rs-specialist-stoke-on-trent' },
 
   // Was a grey M4 rear, which was the same car and near enough the same shot
-  // as the motorsport card sitting next to it. An exhaust detail reads as
+  // as the card sitting next to it. An exhaust detail reads as
   // "modifications" on its own and breaks up a row of car exteriors.
   { slot: 'performance',
     file: '493054976_1252114353584677_8015007314061343860_n.jpg',
     slug: 'performance-exhaust-system-stoke-on-trent' },
-
-  { slot: 'motorsport',
-    file: '710687846_1606982538097855_2022527433101675522_n.jpg',
-    slug: 'bmw-track-race-car-preparation-stoke-on-trent' },
 
   { slot: 'alignment',
     file: '629336027_1504088808387229_2281662335331984979_n.jpg',
@@ -83,8 +79,6 @@ const MANIFEST = [
     slug: 'band-mercedes-amg-stoke-on-trent' },
   { slot: 'bandPerformance', file: '494265475_1251540040308775_2095032823200333441_n.jpg',
     slug: 'band-bmw-m4-performance-stoke-on-trent' },
-  { slot: 'bandMotorsport',  file: '494800053_1255060093290103_454775073149612138_n.jpg',
-    slug: 'band-bmw-race-car-stoke-on-trent' },
 ]
 
 const sips = args => execFileSync('sips', args, { stdio: ['ignore', 'pipe', 'pipe'] }).toString()

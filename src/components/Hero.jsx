@@ -16,9 +16,9 @@ export default function Hero() {
 
             <Reveal immediate delay={.08}>
               <h1>
-                Servicing, tuning and race preparation for <b>BMW, Audi and
+                Servicing, diagnostics and performance work for <b>BMW, Audi and
                 Mercedes</b> in Stoke-on-Trent, from an independent workshop
-                that <b>races what it builds</b>.
+                that <b>runs these cars itself</b>.
               </h1>
             </Reveal>
 

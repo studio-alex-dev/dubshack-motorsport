@@ -40,7 +40,7 @@
      Both are near-black: graphite is neutral, navy is the logo's #002561 taken
      right down, so the break is a change of temperature and not a new colour. */
   --panel:      #101315;   /* graphite */
-  --panel-navy: #0A111B;   /* navy-black, from the Motorsport script outline */
+  --panel-navy: #0A111B;   /* navy-black, from the M script outline */
   --line:     rgba(255, 255, 255, .13);
   --line-lt:  rgba(255, 255, 255, .26);
 
@@ -307,7 +307,6 @@ a:hover .frame__media img, .card:hover .frame__media img { transform: scale(1.05
    which reads as a broken loop rather than as light. */
 .services > .reveal:nth-child(2) .frame__media::after { animation-delay: -4.75s; }
 .services > .reveal:nth-child(3) .frame__media::after { animation-delay: -9.5s; }
-.services > .reveal:nth-child(4) .frame__media::after { animation-delay: -14.25s; }
 
 a:hover .frame__media::after, .card:hover .frame__media::after { opacity: .22; }
 a:hover .frame__media::before, .card:hover .frame__media::before { opacity: .55; }
@@ -442,11 +441,19 @@ a:hover .frame__media::before, .card:hover .frame__media::before { opacity: .55;
    photograph and the centred copy do the work.
    ============================================================ */
 .services {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: clamp(44px, 4.4vw, 64px) clamp(26px, 3vw, 42px);
 }
-@media (max-width: 1120px) { .services { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px)  { .services { grid-template-columns: 1fr; } }
+/* Three services, so the old two-column tablet step left an orphan card on a
+   row of its own. Hold three columns down to 840px, then go to a single
+   centred column capped in width — a full-bleed square photo on a 800px
+   tablet is absurd, but it is right on a phone. */
+@media (max-width: 840px) {
+  .services { grid-template-columns: minmax(0, 460px); justify-content: center; }
+}
+@media (max-width: 560px) {
+  .services { grid-template-columns: 1fr; justify-content: stretch; }
+}
 /* Reveal wraps each card, so the reveal div is the grid item, not the
    card. Pass the stretch through or the cards come out ragged. */
 .services > .reveal { display: flex; }

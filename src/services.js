@@ -48,7 +48,7 @@ export const SERVICES = {
     linkLabel: 'German cars',
     title: 'Independent BMW Specialist Stoke-on-Trent // DubShack',
     description:
-      'Independent BMW, Audi and Mercedes specialist in Stoke-on-Trent. Servicing, diagnostics and performance work, by a workshop that races its own BMW.',
+      'Independent BMW, Audi and Mercedes specialist in Stoke-on-Trent. Servicing, diagnostics and performance work, with the marque software and tooling to match.',
     h1: 'BMW, Audi and Mercedes specialists in Stoke-on-Trent',
     eyebrow: 'German Car Specialist',
     icon: 'Marque',
@@ -63,7 +63,7 @@ export const SERVICES = {
       'DubShack works on BMW, Audi and Mercedes every day, including the M, S and RS cars that need setting up rather than simply repairing. That is the difference between a car that has been fixed and a car that has been sorted.',
     ],
     points: [
-      { t: 'BMW and BMW M', d: 'From a service on a 3 Series to chassis and drivetrain work on M cars. The workshop races a BMW, so the M platforms are familiar ground rather than an occasional job.' },
+      { t: 'BMW and BMW M', d: 'From a service on a 3 Series to chassis and drivetrain work on M cars. The workshop runs BMWs itself, so the M platforms are familiar ground rather than an occasional job.' },
       { t: 'Audi, S and RS', d: 'Servicing, diagnostics and performance work across the Audi range, including the quattro drivetrains and the S and RS models.' },
       { t: 'Mercedes-Benz and AMG', d: 'Routine servicing through to performance and suspension work on the AMG cars.' },
       { t: 'Volkswagen group', d: 'The shared platforms underneath Audi, VW, SEAT and Skoda are the same platforms we work on daily.' },
@@ -72,7 +72,7 @@ export const SERVICES = {
     ],
     faqs: [
       { q: 'Are you a BMW M specialist specifically?',
-        a: 'Yes. M cars are a core part of the work, covering servicing, chassis setup, suspension and performance upgrades. The workshop also prepares and races its own BMW, which is where a lot of the M chassis knowledge comes from.' },
+        a: 'Yes. M cars are a core part of the work, covering servicing, chassis setup, suspension and performance upgrades. The workshop runs and builds BMWs itself, which is where a lot of the M chassis knowledge comes from.' },
       { q: 'Can you service my car and keep the warranty intact?',
         a: 'Yes, provided the manufacturer schedule, correct parts and correct fluids are used and the record is stamped. That is our standard process for cars still inside the manufacturer warranty.' },
       { q: 'Do you have the manufacturer diagnostic software?',
@@ -87,7 +87,7 @@ export const SERVICES = {
     linkLabel: 'Performance',
     title: 'Performance Modifications Stoke-on-Trent // DubShack Motorsport',
     description:
-      'Suspension, bodykits and exhaust upgrades in Stoke-on-Trent. Coilovers, springs, spacers and geometry setup, fitted by a motorsport workshop.',
+      'Suspension, bodykits and exhaust upgrades in Stoke-on-Trent. Coilovers, springs, spacers and geometry setup, fitted by a specialist workshop.',
     h1: 'Performance modifications in Stoke-on-Trent',
     eyebrow: 'Performance Modifications',
     icon: 'Suspension',
@@ -103,7 +103,7 @@ export const SERVICES = {
     ],
     points: [
       { t: 'Suspension', d: 'Coilovers, lowering springs, adjustable arms, bushes and top mounts, chosen for how you actually use the car and set up once fitted.' },
-      { t: 'Geometry and alignment', d: 'String alignment and full geometry setup, from a road-friendly OEM+ spec to a track alignment. See the alignment section on the home page.' },
+      { t: 'Geometry and alignment', d: 'String alignment and full geometry setup, from a road-friendly OEM+ spec to a fast road setup. See the alignment section on the home page.' },
       { t: 'Wheels, spacers and fitment', d: 'Spacers, hub work and arch clearance so a fitment sits right and clears at full lock and full compression, not just on the ramp.' },
       { t: 'Exhaust systems', d: 'Cat-back and full systems, sports cats and manifolds, fitted and checked for fit, clearance and drone before it goes back to you.' },
       { t: 'Bodykits and styling', d: 'Splitters, skirts, diffusers and full kits fitted and aligned properly, including the OEM+ parts that should look like they came that way.' },
@@ -121,44 +121,6 @@ export const SERVICES = {
     ],
   },
 
-  'motorsport-preparation': {
-    nav: 'Motorsport Preparation',
-    linkLabel: 'Motorsport',
-    title: 'Race & Track Car Preparation Stoke-on-Trent // DubShack',
-    description:
-      'Track and race car preparation in Stoke-on-Trent. Cages, safety equipment, corner weighting and track alignment from a workshop that competes.',
-    h1: 'Track and race car preparation in Stoke-on-Trent',
-    eyebrow: 'Motorsport Preparation',
-    icon: 'Flag',
-    image: 'motorsport',
-    alt: 'DubShack Motorsport race car on track',
-    lede:
-      'Track day cars and race cars prepared, set up and supported by a workshop that runs its own car in anger. Everything here has been tested somewhere harder than a road.',
-    detailH2: 'Advice that has already cost us a weekend',
-    band: { image: 'bandMotorsport', line: 'We prepare and race our own car. The advice you get has already cost us a weekend when it was wrong.' },
-    intro: [
-      'Most workshops that offer race preparation have read about it. DubShack builds, prepares and races a car of its own, which means the advice you get has already cost us a weekend when it was wrong.',
-      'Whether it is a road car being made track-worthy or a full competition build, the work starts with what you are trying to do with it and what the regulations for your series allow.',
-    ],
-    points: [
-      { t: 'Track day preparation', d: 'Getting a road car ready to be used hard: brakes, fluids, cooling, geometry and the checks that stop a first track day ending early.' },
-      { t: 'Race builds', d: 'Full competition preparation, stripping, cages, seats and harnesses, built to the regulations for the series you are entering.' },
-      { t: 'Safety equipment', d: 'Cages, seats, harnesses, extinguisher systems and cut-offs, fitted to the standard scrutineering expects.' },
-      { t: 'Corner weighting and setup', d: 'Corner balancing and track alignment on the string equipment, with a setup sheet so the car can be returned to a known baseline.' },
-      { t: 'Between-event servicing', d: 'Post-event checks, fluids, brakes, rebuilds and the running repairs that keep a season going.' },
-      { t: 'Race weekend support', d: 'Talk to us about trackside support. We are at events with our own car, so we know what the weekend actually involves.' },
-    ],
-    faqs: [
-      { q: 'Do I need a cage for a track day?',
-        a: 'Usually not. Most open pit lane track days accept a standard road car with a helmet, sound tyres and good brakes. A cage becomes relevant for competition, and once fitted it brings requirements of its own around seats, harnesses and helmets. We will tell you which side of that line you are on.' },
-      { q: 'Can you prepare a car to a specific series regulation?',
-        a: 'Yes. Send us the regulations for the championship you are entering and the build is specified against them, so the car passes scrutineering rather than nearly passing it.' },
-      { q: 'Is a track car still usable on the road?',
-        a: 'It depends how far you go. There is a broad middle ground, a fast road setup that is genuinely enjoyable on both, and we build a lot of cars to sit there. A full race build is not a road car and we will say so before you spend the money.' },
-      { q: 'Do you actually race yourselves?',
-        a: 'Yes. DubShack prepares and campaigns its own car, and the workshop knowledge comes directly from that. It is also why our advice about what breaks tends to be specific.' },
-    ],
-  },
 }
 
 export const SERVICE_LIST = Object.entries(SERVICES).map(([slug, s]) => ({ slug, ...s }))

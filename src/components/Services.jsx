@@ -12,8 +12,6 @@ const BLURB = {
     'BMW, Audi and Mercedes as an everyday specialism, with the marque tooling and software to match. M, S, RS and AMG cars welcome.',
   'performance-modifications':
     'Suspension, wheels and fitment, exhausts and bodykits, fitted by people who set the car up afterwards rather than handing it back lower.',
-  'motorsport-preparation':
-    'Track day preparation through to full race builds, cages, safety equipment and corner weighting, from a workshop that competes.',
 }
 
 export default function Services() {
@@ -22,16 +20,16 @@ export default function Services() {
       <div className="wrap">
         <Reveal className="sechead sechead--center">
           <Eyebrow>What we do</Eyebrow>
-          <h2>From an oil service to a race car</h2>
+          <h2>From an oil service to a full rebuild</h2>
           <p>
             The same workshop, the same people and the same standard whether the
-            car is a family diesel or something being prepared for a grid.
+            car is a family diesel or a tuned M car.
           </p>
         </Reveal>
 
         <div className="services">
           {SERVICE_LIST.map((s, i) => (
-            <Reveal key={s.slug} delay={(i % 4) * .07}>
+            <Reveal key={s.slug} delay={(i % 3) * .07}>
               <a className="card" href={`/${s.slug}/`}>
                 <div className="card__media frame">
                   <div className="frame__media">

@@ -16,7 +16,7 @@ export const FAQS = [
   },
   {
     q: 'What is string alignment and why does it matter?',
-    a: 'The car is measured against strings squared to its own centreline, which is how a race car is set up. It reads camber, caster and toe accurately on a car that may sit nothing like factory height, which a quick laser check at a tyre place cannot do. It is the difference between a lowered car that steers well and one that tramlines and eats tyres.',
+    a: 'The car is measured against strings squared to its own centreline, which is how a geometry setup is properly done. It reads camber, caster and toe accurately on a car that may sit nothing like factory height, which a quick laser check at a tyre place cannot do. It is the difference between a lowered car that steers well and one that tramlines and eats tyres.',
   },
   {
     q: 'Can you collect my car if it is not driveable?',
